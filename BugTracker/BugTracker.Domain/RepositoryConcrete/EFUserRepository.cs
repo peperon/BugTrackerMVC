@@ -8,7 +8,7 @@ using BugTracker.Domain.Models;
 
 namespace BugTracker.Domain.RepositoryConcrete
 {
-    public class EFUserRepository : IUsersRepository
+    public class EFUserRepository : IUserRepository
     {
         private EFDbContext _dbContext;
 

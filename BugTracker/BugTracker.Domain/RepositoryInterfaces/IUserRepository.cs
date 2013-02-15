@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BugTracker.Domain.RepositoryInterfaces
 {
-    public interface IUsersRepository
+    public interface IUserRepository
     {
         IQueryable<User> Users { get; }
         void SaveUser(User user);

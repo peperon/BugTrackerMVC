@@ -20,6 +20,7 @@ using System.Linq;
             var user = new User
              {
                  UserId = 0,
+                 UserName = "admin",
                  Password = PasswordUtility.HashPassword("12adminpass21"),
                  Email = "pekostov@gmail.com",
                  FirstName = "Peter",

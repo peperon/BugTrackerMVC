@@ -34,7 +34,9 @@
       <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,6 +47,10 @@
     <Compile Include="Migrations\201302080020589_InitialCreate.cs" />
     <Compile Include="Migrations\201302080020589_InitialCreate.Designer.cs">
       <DependentUpon>201302080020589_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201302151509565_AdditionalFieldsToUser.cs" />
+    <Compile Include="Migrations\201302151509565_AdditionalFieldsToUser.Designer.cs">
+      <DependentUpon>201302151509565_AdditionalFieldsToUser.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Error.cs" />
@@ -58,7 +64,7 @@
     <Compile Include="RepositoryConcrete\EFUserRepository.cs" />
     <Compile Include="RepositoryInterfaces\IErrorRepository.cs" />
     <Compile Include="RepositoryInterfaces\IProjectRepository.cs" />
-    <Compile Include="RepositoryInterfaces\IUsersRepository.cs" />
+    <Compile Include="RepositoryInterfaces\IUserRepository.cs" />
     <Compile Include="Utilities\PasswordUtility.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -68,6 +74,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201302080020589_InitialCreate.resx">
       <DependentUpon>201302080020589_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201302151509565_AdditionalFieldsToUser.resx">
+      <DependentUpon>201302151509565_AdditionalFieldsToUser.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
