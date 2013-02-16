@@ -26,6 +26,8 @@ namespace BugTracker.Domain.RepositoryConcrete
         {
             if (user.UserId == 0)
                 _dbContext.Users.Add(user);
+            else if (_dbContext.Entry<User>(user).State != System.Data.EntityState.Modified)
+                _dbContext.Entry<User>(user).State = System.Data.EntityState.Modified;
             _dbContext.SaveChanges();
         }
 

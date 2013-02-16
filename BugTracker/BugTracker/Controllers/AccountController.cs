@@ -95,5 +95,13 @@ namespace BugTracker.Controllers
             var users = _userRepo.Users.Where(user => user.Role != (int)UserRole.Admin);
             return View(users);
         }
+
+        public ActionResult Delete(int id)
+        {
+            var user = _userRepo.Users.FirstOrDefault(u => u.UserId == id);
+            _userRepo.DeleteUser(user);
+
+            return RedirectToAction("Index");
+        }
     }
 }

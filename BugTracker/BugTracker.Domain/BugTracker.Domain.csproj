@@ -36,6 +36,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -51,6 +52,10 @@
     <Compile Include="Migrations\201302151509565_AdditionalFieldsToUser.cs" />
     <Compile Include="Migrations\201302151509565_AdditionalFieldsToUser.Designer.cs">
       <DependentUpon>201302151509565_AdditionalFieldsToUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201302161206223_RequiredToProjectName.cs" />
+    <Compile Include="Migrations\201302161206223_RequiredToProjectName.Designer.cs">
+      <DependentUpon>201302161206223_RequiredToProjectName.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Error.cs" />
@@ -77,6 +82,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201302151509565_AdditionalFieldsToUser.resx">
       <DependentUpon>201302151509565_AdditionalFieldsToUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201302161206223_RequiredToProjectName.resx">
+      <DependentUpon>201302161206223_RequiredToProjectName.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

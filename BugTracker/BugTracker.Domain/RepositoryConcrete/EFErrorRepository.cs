@@ -1,4 +1,5 @@
-﻿using BugTracker.Domain.RepositoryInterfaces;
+﻿using BugTracker.Domain.Models;
+using BugTracker.Domain.RepositoryInterfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,8 @@ namespace BugTracker.Domain.RepositoryConcrete
         {
             if (error.ErrorId == 0)
                 _dbContext.Errors.Add(error);
+            else if (_dbContext.Entry<Error>(error).State != System.Data.EntityState.Modified)
+                _dbContext.Entry<Error>(error).State = System.Data.EntityState.Modified;
             _dbContext.SaveChanges();
         }
 
