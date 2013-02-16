@@ -38,6 +38,25 @@ namespace BugTracker
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.progressbar.css",
                         "~/Content/themes/base/jquery.ui.theme.css"));
+
+            // The Kendo JavaScript bundle
+            bundles.Add(new ScriptBundle("~/bundles/kendo").Include(
+                    "~/Scripts/kendo.web.*", // or kendo.all.* if you want to use Kendo UI Web and Kendo UI DataViz
+                    "~/Scripts/kendo.aspnetmvc.*"));
+
+
+            // The Kendo CSS bundle
+            bundles.Add(new StyleBundle("~/Content/kendo").Include(
+                    "~/Content/kendo.common.*",
+                    "~/Content/kendo.default.*"));
+
+            bundles.IgnoreList.Clear();
+
+
+            // Add back the default ignore list rules sans the ones which affect minified files and debug mode
+            bundles.IgnoreList.Ignore("*.intellisense.js");
+            bundles.IgnoreList.Ignore("*-vsdoc.js");
+            bundles.IgnoreList.Ignore("*.debug.js", OptimizationMode.WhenEnabled);
         }
     }
 }

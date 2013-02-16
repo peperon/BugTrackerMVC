@@ -1,0 +1,57 @@
+﻿@model IEnumerable<SelectListItem>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+<p>
+    @{Html.Kendo().DropDownList()
+        .Name("projects")
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Events(ev => ev.Change("refresh_grid"))
+        .BindTo(Model)
+        .Render();
+    }
+    @Html.ActionLink("Create New", "Create", null, new { id = "create-link" })
+</p>
+<div>
+    @{
+        Html.Kendo().Grid<BugTracker.Models.ErrorModel>()
+            .Name("grid")
+            .Columns(column =>
+                {
+                    column.Bound(error => error.UserName).Title("Owner");
+                    column.Bound(error => error.Priority).Title("Priority");
+                    column.Bound(error => error.DateCreation).Title("Date found");
+                }
+            )
+            .Sortable()
+            .Pageable()
+            .DataSource(datasource => datasource
+                .Ajax()
+                .Read(read => read.Action("Errors", "Errors").Data("drop_down_value"))
+            ).Render();        
+    }
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#create-link").click(function () {
+            var value = $("#projects").val();
+            this.href = this.href + '/' + value;
+        });
+    });
+
+    function drop_down_value() {
+        var value = $("#projects").val();
+        return { projectId: value };
+    }
+
+    function refresh_grid() {
+        alert("test");
+        var grid = $("#grid").data("kendoGrid");
+        grid.read();
+        grid.refresh();
+    }
+</script>
