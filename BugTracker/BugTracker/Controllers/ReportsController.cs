@@ -80,7 +80,7 @@ namespace BugTracker.Controllers
                             ShortDescription = (error.Description.Length <= 50) ?
                                         new string(error.Description.Take(50).ToArray()) :
                                         new string(error.Description.Take(50).ToArray()) + "...",
-                            Owner = error.User.FirstName + " " + error.User.LastName,
+                            Owner = (error.UserId == null) ? "no author" : error.User.FirstName + " " + error.User.LastName,
                             Priority = ((ErrorPriority)error.Priority).ToString(),
                             Project = error.Project.ProjectName,
                             State = ((ErrorState)error.State).ToString(),

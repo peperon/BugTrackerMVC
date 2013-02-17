@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using BugTracker.Domain.Models;
 using BugTracker.Models;
 using BugTracker.Infrastructure;
+using System.Net;
 
 namespace BugTracker.Controllers
 {
@@ -42,7 +43,7 @@ namespace BugTracker.Controllers
                              Id = error.ErrorId,
                              DateCreation = error.DateCreation,
                              Priority = ((ErrorPriority)error.Priority).ToString(),
-                             UserName = error.User.UserName,
+                             UserName = (error.UserId == null) ? "no author" : error.User.UserName,
                          };
             return Json(errors.ToDataSourceResult(request));
         }

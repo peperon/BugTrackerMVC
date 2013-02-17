@@ -65,6 +65,10 @@
     <Compile Include="Migrations\201302171454327_AddedFieldsToUserEntity.Designer.cs">
       <DependentUpon>201302171454327_AddedFieldsToUserEntity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201302171903251_OptionalUserIdForErrors.cs" />
+    <Compile Include="Migrations\201302171903251_OptionalUserIdForErrors.Designer.cs">
+      <DependentUpon>201302171903251_OptionalUserIdForErrors.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Error.cs" />
     <Compile Include="Models\Project.cs" />
@@ -99,6 +103,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201302171454327_AddedFieldsToUserEntity.resx">
       <DependentUpon>201302171454327_AddedFieldsToUserEntity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201302171903251_OptionalUserIdForErrors.resx">
+      <DependentUpon>201302171903251_OptionalUserIdForErrors.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

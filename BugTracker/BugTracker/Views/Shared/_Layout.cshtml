@@ -18,14 +18,17 @@
                     <p class="site-title">@Html.ActionLink("your logo here", "Index", "Home")</p>
                 </div>
                 <div class="float-right">
-                    @*<section id="login">
+                    <section id="login">
                         @Html.Partial("_LoginPartial")
-                    </section>*@
+                    </section>
                     <nav>
-                        <ul id="menu">
+                        <ul id="menu">                            
                             <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                            <li>@Html.ActionLink("Users", "Index", "Account")</li>
-                            <li>@Html.ActionLink("Projects", "Index", "Projects")</li>
+                            @if (User.Identity.Name == "admin")
+                            {
+                                <li>@Html.ActionLink("Users", "Index", "Account")</li>
+                                <li>@Html.ActionLink("Projects", "Index", "Projects")</li>
+                            }
                             <li>@Html.ActionLink("Errors", "Index", "Errors")</li>
                             <li>@Html.ActionLink("Reports", "AllActiveErrors", "Reports")</li>
                         </ul>

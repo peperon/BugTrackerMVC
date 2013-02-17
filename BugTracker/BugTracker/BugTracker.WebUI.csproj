@@ -248,6 +248,8 @@
     <Content Include="Views\Reports\AllActiveErrors.cshtml" />
     <Content Include="Views\Reports\AllActiveErrorsForProject.cshtml" />
     <Content Include="Views\Reports\UsersActivity.cshtml" />
+    <Content Include="Views\Account\Edit.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

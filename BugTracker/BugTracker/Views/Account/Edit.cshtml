@@ -1,24 +1,25 @@
 ﻿@model BugTracker.Domain.Models.User
 
 @{
-    ViewBag.Title = "Register";
+    ViewBag.Title = "Edit";
 }
 
-<h2>Register user</h2>
+<h2>Edit user information</h2>
 
 @using (Html.BeginForm()) {
-    @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
 
     <fieldset>
         <legend>User</legend>
+
+        @Html.HiddenFor(model => model.UserId)
 
         <div class="editor-label">
             @Html.LabelFor(model => model.UserName)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.UserName)
-            @Html.ValidationMessageFor(model => model.UserName)
+            @Html.TextBoxFor(model => model.UserName, new { @readonly = true })
         </div>
 
         <div class="editor-label">
@@ -60,8 +61,9 @@
             @Html.EditorFor(model => model.Phone)
             @Html.ValidationMessageFor(model => model.Phone)
         </div>
+
         <p>
-            <input type="submit" value="Create" />
+            <input type="submit" value="Save" />
         </p>
     </fieldset>
 }

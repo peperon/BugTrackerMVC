@@ -14,13 +14,16 @@ namespace BugTracker.Domain.Models
         public int UserId { get; set; }
 
         [Required]
-        [RegularExpression(@"[A-Za-z0-9]{0,100}", ErrorMessage = "User name can contain only letter and numbers.")]
+        [RegularExpression(@"[A-Za-z][A-Za-z0-9]{0,100}", 
+            ErrorMessage = "User name can contain only letter and numbers and first charter must be letter.")]
         [Display(Name="User name")]
+        [MinLength(3)]
         public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
+        [MinLength(3)]
         public string Password { get; set; }
 
         [Required]
@@ -33,6 +36,7 @@ namespace BugTracker.Domain.Models
 
         [Required]
         [Display(Name = "Email")]
+        [EmailAddress]
         public string Email { get; set; }
 
         [Required]

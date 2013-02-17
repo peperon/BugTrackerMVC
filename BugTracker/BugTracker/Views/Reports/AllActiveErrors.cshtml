@@ -3,9 +3,8 @@
 @{
     ViewBag.Title = "AllActiveErrors";
 }
-
-<article>
-    <h2>AllActiveErrors</h2>
+@Html.Partial("_ReportsMenu")
+    <h2>All active errors</h2>
     @{
         Html.Kendo().Grid(Model)
             .Name("grid")
@@ -26,5 +25,3 @@
                 .PageSize(15)
             ).Render();        
     }
-</article>
-@Html.Partial("_ReportsMenu")

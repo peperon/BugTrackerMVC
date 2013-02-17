@@ -4,8 +4,9 @@
     ViewBag.Title = "AllActiveErrorsForProject";
 }
 
-<article>
-<h2>AllActiveErrorsForProject</h2>
+@Html.Partial("_ReportsMenu")
+
+<h2>All active errors by project</h2>
 <p>
     @{Html.Kendo().DropDownList()
         .Name("projects")
@@ -39,8 +40,7 @@
             ).Render();        
     }
 </div>
-</article>
-@Html.Partial("_ReportsMenu")
+
 <script type="text/javascript">
 
     function drop_down_value() {

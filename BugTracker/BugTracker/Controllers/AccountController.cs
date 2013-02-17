@@ -44,10 +44,18 @@ namespace BugTracker.Controllers
                 return View(model);
             }            
 
-            ApplicationSecurity.AddAuthenticationCookie(user.UserName, ((UserRole)user.Role).ToString(), model.RememberMe);
+            ApplicationSecurity.AddAuthenticationCookie(user.UserName, ((UserRole)user.Role).ToString(), model.RememberMe);          
             ActionLogger.Log("Login", model.UserName);
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult LogOff()
+        {
+            ApplicationSecurity.SignOut();
+            return RedirectToAction("Login", "Account");
         }
 
 
@@ -87,9 +95,23 @@ namespace BugTracker.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(User user)
+        public ActionResult Edit(int id, User user)
         {
-            return View();
+            if (!ModelState.IsValid)
+                return View(user);
+
+            var userDb = _userRepo.Users.FirstOrDefault(u => u.UserId == id);
+
+            userDb.FirstName = user.FirstName;
+            userDb.LastActivity = user.LastName;
+            userDb.Email = user.Email;
+            userDb.Phone = user.Phone;
+            if (userDb.Password != user.Password)
+                userDb.Password = PasswordUtility.HashPassword(user.Password);
+
+            _userRepo.SaveUser(userDb);
+
+            return RedirectToAction("Index");
         }
 
         public ActionResult Index()
@@ -101,6 +123,9 @@ namespace BugTracker.Controllers
         public ActionResult Delete(int id)
         {
             var user = _userRepo.Users.FirstOrDefault(u => u.UserId == id);
+            foreach (var error in user.Errors)
+                error.UserId = null;
+
             _userRepo.DeleteUser(user);
 
             return RedirectToAction("Index");

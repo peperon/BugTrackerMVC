@@ -3,8 +3,10 @@
 @{
     ViewBag.Title = "UsersActivity";
 }
-<article>
-    <h2>UsersActivity</h2>
+
+@Html.Partial("_ReportsMenu")
+<div>
+    <h2>Users activity</h2>
     @{
         Html.Kendo().Grid(Model)
             .Name("grid")
@@ -26,5 +28,4 @@
                 .PageSize(15)
             ).Render();        
     }
-</article>
-@Html.Partial("_ReportsMenu")
+</div>

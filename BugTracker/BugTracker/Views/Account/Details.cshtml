@@ -4,23 +4,15 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>User details</h2>
 
 <fieldset>
     <legend>User</legend>
-
     <div class="display-label">
          @Html.DisplayNameFor(model => model.UserName)
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.UserName)
-    </div>
-
-    <div class="display-label">
-         @Html.DisplayNameFor(model => model.Password)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Password)
     </div>
 
     <div class="display-label">
@@ -55,7 +47,7 @@
          @Html.DisplayNameFor(model => model.Role)
     </div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.Role)
+        @((BugTracker.Domain.Models.UserRole)Model.Role)
     </div>
 </fieldset>
 <p>
