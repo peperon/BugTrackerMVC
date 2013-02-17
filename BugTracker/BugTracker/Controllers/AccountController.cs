@@ -42,9 +42,11 @@ namespace BugTracker.Controllers
             {
                 ModelState.AddModelError("PasswordUsernameError", "Invalid Username or Password!");
                 return View(model);
-            }
+            }            
 
             ApplicationSecurity.AddAuthenticationCookie(user.UserName, ((UserRole)user.Role).ToString(), model.RememberMe);
+            ActionLogger.Log("Login", model.UserName);
+
             return RedirectToAction("Index", "Home");
         }
 

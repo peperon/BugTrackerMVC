@@ -41,6 +41,10 @@ namespace BugTracker.Domain.Models
 
         public int Role { get; set; }
 
+        public DateTime? LastActivityDate { get; set; }
+
+        public string LastActivity { get; set; }
+
         public virtual List<Error> Errors { get; set; }
     }
 }

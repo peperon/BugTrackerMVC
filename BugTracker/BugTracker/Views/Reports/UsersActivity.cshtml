@@ -1,0 +1,30 @@
+﻿@model IEnumerable<BugTracker.Models.UserActivityModel>
+
+@{
+    ViewBag.Title = "UsersActivity";
+}
+<article>
+    <h2>UsersActivity</h2>
+    @{
+        Html.Kendo().Grid(Model)
+            .Name("grid")
+            .Resizable(res => res.Columns(true))
+            .Columns(column =>
+                {
+                    column.Bound(user => user.UserName);
+                    column.Bound(user => user.Name);
+                    column.Bound(user => user.NumberOfProjects);
+                    column.Bound(user => user.NumberOfErrors);
+                    column.Bound(user => user.ActivityDate);
+                    column.Bound(user => user.LastAction);
+                }
+            )
+            .Sortable()
+            .Pageable()
+            .DataSource(datasource => datasource
+                .Server()
+                .PageSize(15)
+            ).Render();        
+    }
+</article>
+@Html.Partial("_ReportsMenu")

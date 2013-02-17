@@ -16,11 +16,28 @@ namespace BugTracker.Controllers
     {
         private IErrorRepository _errorRepo;
         private IProjectRepository _projectRepo;
+        private IUserRepository _userRepo;
 
-        public ReportsController(IErrorRepository errorRepo, IProjectRepository projectRepo)
+        public ReportsController(IErrorRepository errorRepo, IProjectRepository projectRepo, IUserRepository userRepo)
         {
             _errorRepo = errorRepo;
             _projectRepo = projectRepo;
+            _userRepo = userRepo;
+        }
+
+        public ActionResult UsersActivity()
+        {
+            var model = from user in _userRepo.Users.ToList()
+                        select new UserActivityModel
+                        {
+                           UserName = user.UserName,
+                           Name = user.FirstName + " " + user.LastName,
+                           NumberOfErrors = user.Errors.Count(err => err.State != (int)ErrorState.Deleted),
+                           NumberOfProjects = user.Errors.Select(err => err.ProjectId).Distinct().Count(),
+                           ActivityDate = user.LastActivityDate,
+                           LastAction = user.LastActivity,
+                        };
+            return View(model);
         }
 
         public ActionResult AllActiveErrors()
@@ -28,8 +45,6 @@ namespace BugTracker.Controllers
             var model = ActiveErrors();
             return View(model);
         }
-
-
 
         public ActionResult AllActiveErrorsForProject()
         {
@@ -48,9 +63,10 @@ namespace BugTracker.Controllers
         {
             ViewBag.Projects = _projectRepo.Projects.ToList()
                 .Select(project =>
-                    new SelectListItem 
-                    { 
-                        Text = project.ProjectName, Value = project.ProjectId.ToString(),
+                    new SelectListItem
+                    {
+                        Text = project.ProjectName,
+                        Value = project.ProjectId.ToString(),
                     });
         }
 

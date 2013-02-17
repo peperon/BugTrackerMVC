@@ -61,6 +61,10 @@
     <Compile Include="Migrations\201302170905154_ErrorRequiredDescription.Designer.cs">
       <DependentUpon>201302170905154_ErrorRequiredDescription.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201302171454327_AddedFieldsToUserEntity.cs" />
+    <Compile Include="Migrations\201302171454327_AddedFieldsToUserEntity.Designer.cs">
+      <DependentUpon>201302171454327_AddedFieldsToUserEntity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Error.cs" />
     <Compile Include="Models\Project.cs" />
@@ -92,6 +96,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201302170905154_ErrorRequiredDescription.resx">
       <DependentUpon>201302170905154_ErrorRequiredDescription.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201302171454327_AddedFieldsToUserEntity.resx">
+      <DependentUpon>201302171454327_AddedFieldsToUserEntity.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

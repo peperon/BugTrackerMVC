@@ -8,9 +8,11 @@ using System.Web;
 using System.Web.Mvc;
 using BugTracker.Domain.Models;
 using BugTracker.Models;
+using BugTracker.Infrastructure;
 
 namespace BugTracker.Controllers
 {
+    [Authorize]
     public class ErrorsController : Controller
     {
         private IProjectRepository _projectRepo;
@@ -76,6 +78,7 @@ namespace BugTracker.Controllers
             error.DateCreation = DateTime.Now;
 
             _errorRepo.SaveError(error);
+            ActionLogger.Log("Created error #" + error.ErrorId, User.Identity.Name);
 
             return RedirectToAction("Index");
         }
@@ -94,8 +97,6 @@ namespace BugTracker.Controllers
                              Owner = errSelector.User.UserName,
                              Project = errSelector.Project.ProjectName
                          }).FirstOrDefault();
-            if (error == null)
-                throw new Exception();
 
             FillViewBagWithEnums();
             return View(error);
@@ -112,14 +113,14 @@ namespace BugTracker.Controllers
             }
 
             var error = _errorRepo.Errors.FirstOrDefault(err => err.ErrorId == model.Id);
-            if (error == null)
-                throw new Exception();
 
             error.Description = model.Description;
             error.Priority = model.Priority;
             error.State = model.State;
 
             _errorRepo.SaveError(error);
+            ActionLogger.Log("Edited error #" + error.ErrorId, User.Identity.Name);
+
             return RedirectToAction("Index");
         }
 
@@ -129,6 +130,8 @@ namespace BugTracker.Controllers
             var error = _errorRepo.Errors.FirstOrDefault(err => err.ErrorId == id);
             error.State = (int)ErrorState.Deleted;
             _errorRepo.SaveError(error);
+
+            ActionLogger.Log("Deleted error #" + id, User.Identity.Name);
 
             return RedirectToAction("Index");
         }

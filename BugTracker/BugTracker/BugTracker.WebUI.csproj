@@ -136,12 +136,14 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\ActionLogger.cs" />
     <Compile Include="Infrastructure\ApplicationSecurity.cs" />
     <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\AllActiveErrorsReportModel.cs" />
     <Compile Include="Models\ErrorEditModel.cs" />
     <Compile Include="Models\ErrorModel.cs" />
+    <Compile Include="Models\UserActivityModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -245,6 +247,7 @@
     <Content Include="Views\Reports\_ReportsMenu.cshtml" />
     <Content Include="Views\Reports\AllActiveErrors.cshtml" />
     <Content Include="Views\Reports\AllActiveErrorsForProject.cshtml" />
+    <Content Include="Views\Reports\UsersActivity.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

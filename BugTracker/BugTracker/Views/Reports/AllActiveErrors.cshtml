@@ -4,9 +4,9 @@
     ViewBag.Title = "AllActiveErrors";
 }
 
-<h2>AllActiveErrors</h2>
 <article>
-@{
+    <h2>AllActiveErrors</h2>
+    @{
         Html.Kendo().Grid(Model)
             .Name("grid")
             .Resizable(res => res.Columns(true))
@@ -25,6 +25,6 @@
                 .Server()
                 .PageSize(15)
             ).Render();        
-}
+    }
 </article>
 @Html.Partial("_ReportsMenu")
