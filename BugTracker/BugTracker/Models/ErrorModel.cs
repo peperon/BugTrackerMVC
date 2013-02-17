@@ -7,6 +7,8 @@ namespace BugTracker.Models
 {
     public class ErrorModel
     {
+        public int Id { get; set; }
+
         public string UserName { get; set; }
 
         public string Priority { get; set; }

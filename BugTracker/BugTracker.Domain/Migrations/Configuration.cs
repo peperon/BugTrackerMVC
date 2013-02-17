@@ -28,8 +28,8 @@ using System.Linq;
                  Phone = "08236652",
                  Role = (int)UserRole.Admin,
              };
-
-            context.Users.Add(user);
+            if(context.Users.FirstOrDefault(u => u.UserName == user.UserName) == null)
+                context.Users.Add(user);
         }
     }
 }

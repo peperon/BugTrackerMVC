@@ -24,9 +24,6 @@ namespace BugTracker.Controllers
             _userRepo = userRepo;
         }
 
-        //
-        // GET: /Errors/
-
         public ActionResult Index()
         {
             var model = _projectRepo.Projects.ToList()
@@ -37,26 +34,22 @@ namespace BugTracker.Controllers
         public ActionResult Errors([DataSourceRequest] DataSourceRequest request, int projectId)
         {
             var errors = from error in _errorRepo.Errors.ToList()
-                         where error.ProjectId == projectId
+                         where error.ProjectId == projectId && error.State != (int)ErrorState.Deleted
                          select new ErrorModel
                          {
+                             Id = error.ErrorId,
                              DateCreation = error.DateCreation,
-                             Priority = error.Priority.ToString(),
+                             Priority = ((ErrorPriority)error.Priority).ToString(),
                              UserName = error.User.UserName,
                          };
             return Json(errors.ToDataSourceResult(request));
         }
 
-        //
-        // GET: /Errors/Details/5
-
         public ActionResult Details(int id)
         {
-            return View();
+            var error = _errorRepo.Errors.FirstOrDefault(err => err.ErrorId == id);
+            return View(error);
         }
-
-        //
-        // GET: /Errors/Create
 
         public ActionResult Create(int id)
         {
@@ -64,7 +57,92 @@ namespace BugTracker.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(Error error)
+        {
+            if (!ModelState.IsValid)
+            {
+                FillViewBag(error.ProjectId);
+                return View(error);
+            }
+
+            var currentUser = _userRepo.Users.FirstOrDefault(user => user.UserName == User.Identity.Name);
+            if (currentUser == null)
+                throw new Exception();
+
+            error.State = (int)ErrorState.New;
+            error.UserId = currentUser.UserId;
+            error.DateCreation = DateTime.Now;
+
+            _errorRepo.SaveError(error);
+
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Edit(int id)
+        {
+            var error = (from errSelector in _errorRepo.Errors
+                         where errSelector.ErrorId == id
+                         select new ErrorEditModel
+                         {
+                             Id = errSelector.ErrorId,
+                             DateCreation = errSelector.DateCreation,
+                             Description = errSelector.Description,
+                             State = errSelector.State,
+                             Priority = errSelector.Priority,
+                             Owner = errSelector.User.UserName,
+                             Project = errSelector.Project.ProjectName
+                         }).FirstOrDefault();
+            if (error == null)
+                throw new Exception();
+
+            FillViewBagWithEnums();
+            return View(error);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(int id, ErrorEditModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                FillViewBagWithEnums();
+                return View(model);
+            }
+
+            var error = _errorRepo.Errors.FirstOrDefault(err => err.ErrorId == model.Id);
+            if (error == null)
+                throw new Exception();
+
+            error.Description = model.Description;
+            error.Priority = model.Priority;
+            error.State = model.State;
+
+            _errorRepo.SaveError(error);
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            var error = _errorRepo.Errors.FirstOrDefault(err => err.ErrorId == id);
+            error.State = (int)ErrorState.Deleted;
+            _errorRepo.SaveError(error);
+
+            return RedirectToAction("Index");
+        }
+
         private void FillViewBag(int id)
+        {
+            ViewBag.Projects = _projectRepo.Projects.ToList()
+                .Select(project =>
+                    new SelectListItem { Text = project.ProjectName, Value = project.ProjectId.ToString(), Selected = project.ProjectId == id }
+                    );
+            FillViewBagWithEnums();
+        }
+
+        private void FillViewBagWithEnums()
         {
             ViewBag.Priorities = new List<SelectListItem>
             {
@@ -74,96 +152,13 @@ namespace BugTracker.Controllers
                 new SelectListItem { Text = "Critical", Value = ((int)ErrorPriority.Critical).ToString() },
             };
 
-            ViewBag.Projects = _projectRepo.Projects.ToList()
-                .Select(project =>
-                    new SelectListItem { Text = project.ProjectName, Value = project.ProjectId.ToString(), Selected = project.ProjectId == id }
-                    );
-
-        }
-
-        //
-        // POST: /Errors/Create
-
-        [HttpPost]
-        public ActionResult Create(Error error)
-        {
-            try
+            ViewBag.States = new List<SelectListItem>
             {
-                if (!ModelState.IsValid)
-                {
-                    FillViewBag(error.ProjectId);
-                    return View(error);
-                }
-
-                // TODO: Add insert logic here
-                var currentUser = _userRepo.Users.FirstOrDefault(user => user.UserName == User.Identity.Name);
-                if (currentUser == null)
-                    throw new Exception();
-
-                error.State = (int)ErrorState.New;
-                error.UserId = currentUser.UserId;
-                error.DateCreation = DateTime.Now;
-
-                _errorRepo.SaveError(error);
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        //
-        // GET: /Errors/Edit/5
-
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        //
-        // POST: /Errors/Edit/5
-
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        //
-        // GET: /Errors/Delete/5
-
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        //
-        // POST: /Errors/Delete/5
-
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+                new SelectListItem { Text = "New", Value = ((int)ErrorState.New).ToString() },
+                new SelectListItem { Text = "In Progress", Value = ((int)ErrorState.InProgress).ToString() },
+                new SelectListItem { Text = "Fixed", Value = ((int)ErrorState.Fixed).ToString() },
+                new SelectListItem { Text = "Closed", Value = ((int)ErrorState.Closed).ToString() },
+            };
         }
     }
 }

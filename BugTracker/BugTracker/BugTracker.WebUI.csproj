@@ -138,6 +138,7 @@
     <Compile Include="Infrastructure\ApplicationSecurity.cs" />
     <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\ErrorEditModel.cs" />
     <Compile Include="Models\ErrorModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -237,6 +238,8 @@
     <Content Include="Views\Projects\Edit.cshtml" />
     <Content Include="Views\Errors\Index.cshtml" />
     <Content Include="Views\Errors\Create.cshtml" />
+    <Content Include="Views\Errors\Edit.cshtml" />
+    <Content Include="Views\Errors\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

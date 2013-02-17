@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,8 @@ namespace BugTracker.Domain.Models
     {
         public int ErrorId { get; set; }
         public DateTime DateCreation { get; set; }
+
+        [Required]
         public string Description { get; set; }
         public int Priority { get; set; }
         public int State { get; set; }

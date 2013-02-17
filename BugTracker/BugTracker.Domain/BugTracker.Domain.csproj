@@ -57,6 +57,10 @@
     <Compile Include="Migrations\201302161206223_RequiredToProjectName.Designer.cs">
       <DependentUpon>201302161206223_RequiredToProjectName.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201302170905154_ErrorRequiredDescription.cs" />
+    <Compile Include="Migrations\201302170905154_ErrorRequiredDescription.Designer.cs">
+      <DependentUpon>201302170905154_ErrorRequiredDescription.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Error.cs" />
     <Compile Include="Models\Project.cs" />
@@ -85,6 +89,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201302161206223_RequiredToProjectName.resx">
       <DependentUpon>201302161206223_RequiredToProjectName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201302170905154_ErrorRequiredDescription.resx">
+      <DependentUpon>201302170905154_ErrorRequiredDescription.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

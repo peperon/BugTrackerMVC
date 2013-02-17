@@ -26,5 +26,6 @@ namespace BugTracker.Domain.Models
         InProgress,
         Fixed,
         Closed,
+        Deleted,
     }
 }

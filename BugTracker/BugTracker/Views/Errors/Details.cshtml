@@ -1,0 +1,57 @@
+﻿@model BugTracker.Domain.Models.Error
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Error</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.DateCreation)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DateCreation)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Description)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Description)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Priority)
+    </div>
+    <div class="display-field">
+        @((BugTracker.Domain.Models.ErrorPriority)Model.Priority)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.State)
+    </div>
+    <div class="display-field">
+        @((BugTracker.Domain.Models.ErrorState)Model.State))
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.User)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.User.UserName)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Project)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Project.ProjectName)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.ErrorId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -14,24 +14,37 @@
         .BindTo(Model)
         .Render();
     }
-    @Html.ActionLink("Create New", "Create", null, new { id = "create-link" })
 </p>
 <div>
     @{
         Html.Kendo().Grid<BugTracker.Models.ErrorModel>()
             .Name("grid")
+            .Resizable(res => res.Columns(true))
+            .ToolBar(toolbar =>
+                {
+                    toolbar.Custom().Action("Create", "Errors", null).HtmlAttributes(new { id = "create-link" }).Text("Create new error");
+                })
             .Columns(column =>
                 {
                     column.Bound(error => error.UserName).Title("Owner");
                     column.Bound(error => error.Priority).Title("Priority");
                     column.Bound(error => error.DateCreation).Title("Date found");
+                    column.Command(command =>
+                        {
+                            command.Custom("Details").Click("details");
+                            command.Custom("Edit").Click("edit");
+                            command.Destroy();
+                        });
                 }
             )
             .Sortable()
             .Pageable()
             .DataSource(datasource => datasource
                 .Ajax()
+                .Model(model => model.Id("Id"))
                 .Read(read => read.Action("Errors", "Errors").Data("drop_down_value"))
+                .Destroy(destroy => destroy.Action("Delete", "Errors", new { id = "#=Id#" }))
+                .PageSize(20)
             ).Render();        
     }
 </div>
@@ -48,10 +61,27 @@
         return { projectId: value };
     }
 
-    function refresh_grid() {
-        alert("test");
+    function refresh_grid() {        
         var grid = $("#grid").data("kendoGrid");
-        grid.read();
+        grid.dataSource.read();
         grid.refresh();
+    }
+
+    function edit(e) {
+        e.preventDefault();
+        var grid = $('#grid').data("kendoGrid");
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        var actionUrl = '@Url.Action("Edit", "Errors", new { id = "placeholder" })';
+        window.location.href = (actionUrl.replace("placeholder", dataItem.Id));
+    }
+
+    function details(e) {
+        e.preventDefault();
+        var grid = $('#grid').data("kendoGrid");
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        var actionUrl = '@Url.Action("Details", "Errors", new { id = "placeholder" })';
+        window.location.href = (actionUrl.replace("placeholder", dataItem.Id));
     }
 </script>
