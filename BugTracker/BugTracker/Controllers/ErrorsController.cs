@@ -137,8 +137,12 @@ namespace BugTracker.Controllers
         {
             ViewBag.Projects = _projectRepo.Projects.ToList()
                 .Select(project =>
-                    new SelectListItem { Text = project.ProjectName, Value = project.ProjectId.ToString(), Selected = project.ProjectId == id }
-                    );
+                    new SelectListItem
+                    {
+                        Text = project.ProjectName,
+                        Value = project.ProjectId.ToString(),
+                        Selected = project.ProjectId == id
+                    });
             FillViewBagWithEnums();
         }
 

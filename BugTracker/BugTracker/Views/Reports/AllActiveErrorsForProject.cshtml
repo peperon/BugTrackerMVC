@@ -1,0 +1,56 @@
+﻿@model IEnumerable<SelectListItem>
+
+@{
+    ViewBag.Title = "AllActiveErrorsForProject";
+}
+
+<article>
+<h2>AllActiveErrorsForProject</h2>
+<p>
+    @{Html.Kendo().DropDownList()
+        .Name("projects")
+        .DataTextField("Text")
+        .DataValueField("Value")
+        .Events(ev => ev.Change("refresh_grid"))
+        .BindTo(Model)
+        .Render();
+    }
+</p>
+<div>
+    @{
+        Html.Kendo().Grid<BugTracker.Models.AllActiveErrorsReportModel>()
+            .Name("grid")
+            .Resizable(res => res.Columns(true))
+            .Columns(column =>
+                {
+                    column.Bound(error => error.ShortDescription).Title("Description");
+                    column.Bound(error => error.Priority);
+                    column.Bound(error => error.Owner);
+                    column.Bound(error => error.Project);
+                    column.Bound(error => error.State);
+                }
+            )
+            .Sortable()
+            .Pageable()
+            .DataSource(datasource => datasource
+                .Ajax()
+                .Read(read => read.Action("Errors", "Reports").Data("drop_down_value"))
+                .PageSize(15)
+            ).Render();        
+    }
+</div>
+</article>
+@Html.Partial("_ReportsMenu")
+<script type="text/javascript">
+
+    function drop_down_value() {
+        var value = $("#projects").val();
+        return { projectId: value };
+    }
+
+    function refresh_grid() {        
+        var grid = $("#grid").data("kendoGrid");
+        grid.dataSource.read();
+        grid.refresh();
+    }
+</script>

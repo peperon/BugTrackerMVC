@@ -1,0 +1,30 @@
+﻿@model IEnumerable<BugTracker.Models.AllActiveErrorsReportModel>
+
+@{
+    ViewBag.Title = "AllActiveErrors";
+}
+
+<h2>AllActiveErrors</h2>
+<article>
+@{
+        Html.Kendo().Grid(Model)
+            .Name("grid")
+            .Resizable(res => res.Columns(true))
+            .Columns(column =>
+                {
+                    column.Bound(error => error.ShortDescription).Title("Description");
+                    column.Bound(error => error.Priority);
+                    column.Bound(error => error.Owner);
+                    column.Bound(error => error.Project);
+                    column.Bound(error => error.State);
+                }
+            )
+            .Sortable()
+            .Pageable()
+            .DataSource(datasource => datasource
+                .Server()
+                .PageSize(15)
+            ).Render();        
+}
+</article>
+@Html.Partial("_ReportsMenu")
