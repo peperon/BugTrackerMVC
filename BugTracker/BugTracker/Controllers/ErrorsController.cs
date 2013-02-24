@@ -29,28 +29,19 @@ namespace BugTracker.Controllers
 
         public ActionResult Index()
         {
-            var model = _projectRepo.Projects.ToList()
-                .Select(p => new SelectListItem { Text = p.ProjectName, Value = p.ProjectId.ToString() });
+            var model = _projectRepo.GetProjects().Select(project => project.ToSelectListItem());
             return View(model);
         }
 
         public ActionResult Errors([DataSourceRequest] DataSourceRequest request, int projectId)
         {
-            var errors = from error in _errorRepo.Errors.ToList()
-                         where error.ProjectId == projectId && error.State != (int)ErrorState.Deleted
-                         select new ErrorModel
-                         {
-                             Id = error.ErrorId,
-                             DateCreation = error.DateCreation,
-                             Priority = ((ErrorPriority)error.Priority).ToString(),
-                             UserName = (error.UserId == null) ? "no author" : error.User.UserName,
-                         };
+            var errors = _errorRepo.GetActiveErrorsForProject(projectId).Select(error => error.ToErrorModel());
             return Json(errors.ToDataSourceResult(request));
         }
 
         public ActionResult Details(int id)
         {
-            var error = _errorRepo.Errors.FirstOrDefault(err => err.ErrorId == id);
+            var error = _errorRepo.GetError(id);
             return View(error);
         }
 
@@ -70,9 +61,7 @@ namespace BugTracker.Controllers
                 return View(error);
             }
 
-            var currentUser = _userRepo.Users.FirstOrDefault(user => user.UserName == User.Identity.Name);
-            if (currentUser == null)
-                throw new Exception();
+            var currentUser = _userRepo.GetUser(User.Identity.Name);
 
             error.State = (int)ErrorState.New;
             error.UserId = currentUser.UserId;
@@ -86,20 +75,9 @@ namespace BugTracker.Controllers
 
         public ActionResult Edit(int id)
         {
-            var error = (from errSelector in _errorRepo.Errors
-                         where errSelector.ErrorId == id
-                         select new ErrorEditModel
-                         {
-                             Id = errSelector.ErrorId,
-                             DateCreation = errSelector.DateCreation,
-                             Description = errSelector.Description,
-                             State = errSelector.State,
-                             Priority = errSelector.Priority,
-                             Owner = errSelector.User.UserName,
-                             Project = errSelector.Project.ProjectName
-                         }).FirstOrDefault();
-
+            var error = _errorRepo.GetError(id).ToErrorEdit();
             FillViewBagWithEnums();
+
             return View(error);
         }
 
@@ -113,7 +91,7 @@ namespace BugTracker.Controllers
                 return View(model);
             }
 
-            var error = _errorRepo.Errors.FirstOrDefault(err => err.ErrorId == model.Id);
+            var error = _errorRepo.GetError(id);
 
             error.Description = model.Description;
             error.Priority = model.Priority;
@@ -128,7 +106,7 @@ namespace BugTracker.Controllers
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            var error = _errorRepo.Errors.FirstOrDefault(err => err.ErrorId == id);
+            var error = _errorRepo.GetError(id);
             error.State = (int)ErrorState.Deleted;
             _errorRepo.SaveError(error);
 
@@ -139,14 +117,13 @@ namespace BugTracker.Controllers
 
         private void FillViewBag(int id)
         {
-            ViewBag.Projects = _projectRepo.Projects.ToList()
-                .Select(project =>
-                    new SelectListItem
-                    {
-                        Text = project.ProjectName,
-                        Value = project.ProjectId.ToString(),
-                        Selected = project.ProjectId == id
-                    });
+            ViewBag.Projects = _projectRepo.GetProjects().Select(project =>
+                {
+                    var selectListItem = project.ToSelectListItem();
+                    selectListItem.Selected = project.ProjectId == id;
+                    return selectListItem;
+                });
+
             FillViewBagWithEnums();
         }
 

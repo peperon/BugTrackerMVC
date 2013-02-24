@@ -17,11 +17,6 @@ namespace BugTracker.Domain.RepositoryConcrete
             _dbContext = new EFDbContext();
         }
 
-        public IQueryable<User> Users
-        {
-            get { return _dbContext.Users; }
-        }
-
         public void SaveUser(User user)
         {
             if (user.UserId == 0)
@@ -35,6 +30,29 @@ namespace BugTracker.Domain.RepositoryConcrete
         {
             _dbContext.Users.Remove(user);
             _dbContext.SaveChanges();
+        }
+
+        public User GetUser(string name, string password)
+        {
+            return _dbContext.Users.FirstOrDefault(u => u.UserName == name && u.Password == password);
+        }
+
+
+        public User GetUser(string name)
+        {
+            return _dbContext.Users.FirstOrDefault(u => u.UserName == name);
+        }
+
+
+        public User GetUser(int id)
+        {
+            return _dbContext.Users.FirstOrDefault(u => u.UserId == id);
+        }
+
+
+        public IEnumerable<User> GetUsers()
+        {
+            return _dbContext.Users.Where(user => user.Role != (int)UserRole.Admin).ToList();
         }
     }
 }

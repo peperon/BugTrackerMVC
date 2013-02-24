@@ -13,8 +13,7 @@ namespace BugTracker.Infrastructure
         public static void Log(string message, string username)
         {
             var userRepo = DependencyResolver.Current.GetService<IUserRepository>();
-            var user = userRepo.Users.FirstOrDefault(u =>
-                u.UserName == username);
+            var user = userRepo.GetUser(username);
 
             user.LastActivity = message;
             user.LastActivityDate = DateTime.Now;

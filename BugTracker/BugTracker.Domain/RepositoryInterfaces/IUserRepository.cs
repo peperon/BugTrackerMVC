@@ -9,8 +9,12 @@ namespace BugTracker.Domain.RepositoryInterfaces
 {
     public interface IUserRepository
     {
-        IQueryable<User> Users { get; }
         void SaveUser(User user);
         void DeleteUser(User user);
+
+        User GetUser(string name, string password);
+        User GetUser(string name);
+        User GetUser(int id);
+        IEnumerable<User> GetUsers();
     }
 }

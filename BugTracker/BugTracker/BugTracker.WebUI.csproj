@@ -143,6 +143,7 @@
     <Compile Include="Models\AllActiveErrorsReportModel.cs" />
     <Compile Include="Models\ErrorEditModel.cs" />
     <Compile Include="Models\ErrorModel.cs" />
+    <Compile Include="Models\Extensions.cs" />
     <Compile Include="Models\UserActivityModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

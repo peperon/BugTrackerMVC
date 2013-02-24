@@ -23,16 +23,7 @@ namespace BugTracker.Controllers
 
         public ActionResult Index()
         {
-            return View(_projectRepo.Projects);
-        }
-
-        //
-        // GET: /Projects/Details/5
-
-        public ActionResult Details(int id)
-        {
-
-            return View();
+            return View(_projectRepo.GetProjects());
         }
 
         //
@@ -50,15 +41,7 @@ namespace BugTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Project project)
         {
-            try
-            {
-                // TODO: Add insert logic here
-                return SaveProject(project);
-            }
-            catch
-            {
-                return View();
-            }
+            return SaveProject(project);
         }
 
         //
@@ -66,7 +49,7 @@ namespace BugTracker.Controllers
 
         public ActionResult Edit(int id)
         {
-            var project = _projectRepo.Projects.FirstOrDefault(p => p.ProjectId == id);
+            var project = _projectRepo.GetProject(id);
             return View(project);
         }
 
@@ -77,15 +60,7 @@ namespace BugTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, Project project)
         {
-            try
-            {
-                // TODO: Add update logic here
-                return SaveProject(project);
-            }
-            catch
-            {
-                return View();
-            }
+            return SaveProject(project);
         }
 
         //
@@ -93,8 +68,7 @@ namespace BugTracker.Controllers
 
         public ActionResult Delete(int id)
         {
-            var project = _projectRepo.Projects.FirstOrDefault(p => p.ProjectId == id);
-
+            var project = _projectRepo.GetProject(id);
             return View(project);
         }
 
@@ -102,9 +76,9 @@ namespace BugTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteProject(int id)
         {
-            var project = _projectRepo.Projects.First(p => p.ProjectId == id);
-
+            var project = _projectRepo.GetProject(id);
             _projectRepo.DeleteProject(project);
+
             return RedirectToAction("Index");
         }
 
@@ -113,7 +87,8 @@ namespace BugTracker.Controllers
 
         private ActionResult SaveProject(Project project)
         {
-            var existingProject = _projectRepo.Projects.FirstOrDefault(p => p.ProjectName == project.ProjectName);
+            var existingProject = _projectRepo.GetProject(project.ProjectName);
+
             if (existingProject != null && project.ProjectId != existingProject.ProjectId)
                 ModelState.AddModelError("ProjectName", "Project name is already used");
             if (!ModelState.IsValid)

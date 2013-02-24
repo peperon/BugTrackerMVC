@@ -8,9 +8,12 @@ using System.Threading.Tasks;
 namespace BugTracker.Domain.RepositoryInterfaces
 {
     public interface IProjectRepository
-    {
-        IQueryable<Project> Projects { get; }
+    {        
         void SaveProject(Project project);
         void DeleteProject(Project project);
+
+        IEnumerable<Project> GetProjects();
+        Project GetProject(int id);
+        Project GetProject(string projectName);
     }
 }

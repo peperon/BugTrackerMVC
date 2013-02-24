@@ -11,7 +11,7 @@ using System.Web.Mvc;
 
 namespace BugTracker.Controllers
 {
-    [Authorize(Roles="Admin")]
+    [Authorize(Roles = "Admin")]
     public class AccountController : Controller
     {
         private IUserRepository _userRepo;
@@ -24,27 +24,25 @@ namespace BugTracker.Controllers
         [AllowAnonymous]
         public ActionResult Login()
         {
-            var model = new LoginModel();
-            return View(model);
+            return View();
         }
 
         [HttpPost]
-        [AllowAnonymous]        
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            var password = PasswordUtility.HashPassword(model.Password);
-            var user = _userRepo.Users.FirstOrDefault(u => u.UserName == model.UserName && u.Password == password);
+            var user = _userRepo.GetUser(model.UserName, PasswordUtility.HashPassword(model.Password));
             if (user == null)
             {
                 ModelState.AddModelError("PasswordUsernameError", "Invalid Username or Password!");
                 return View(model);
-            }            
+            }
 
-            ApplicationSecurity.AddAuthenticationCookie(user.UserName, ((UserRole)user.Role).ToString(), model.RememberMe);          
+            ApplicationSecurity.AddAuthenticationCookie(user.UserName, ((UserRole)user.Role).ToString(), model.RememberMe);
             ActionLogger.Log("Login", model.UserName);
 
             return RedirectToAction("Index", "Home");
@@ -61,19 +59,20 @@ namespace BugTracker.Controllers
 
         public ActionResult Create()
         {
-            return View();                 
+            return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(User user)
         {
-            var existingUser = _userRepo.Users.FirstOrDefault(u => u.UserName == user.UserName);
+            var existingUser = _userRepo.GetUser(user.UserName);
+
             if (existingUser != null)
                 ModelState.AddModelError("UserName", "User name is already used");
             if (!ModelState.IsValid)
-                return View(user);                
-            
+                return View(user);
+
             user.Role = (int)UserRole.QualityAssurance;
             user.Password = PasswordUtility.HashPassword(user.Password);
             _userRepo.SaveUser(user);
@@ -83,13 +82,13 @@ namespace BugTracker.Controllers
 
         public ActionResult Details(int id)
         {
-            var user = _userRepo.Users.FirstOrDefault(u => u.UserId == id);
+            var user = _userRepo.GetUser(id);
             return View(user);
         }
 
         public ActionResult Edit(int id)
         {
-            var user = _userRepo.Users.FirstOrDefault(u => u.UserId == id);
+            var user = _userRepo.GetUser(id);
             return View(user);
         }
 
@@ -100,7 +99,7 @@ namespace BugTracker.Controllers
             if (!ModelState.IsValid)
                 return View(user);
 
-            var userDb = _userRepo.Users.FirstOrDefault(u => u.UserId == id);
+            var userDb = _userRepo.GetUser(id);
 
             userDb.FirstName = user.FirstName;
             userDb.LastActivity = user.LastName;
@@ -116,13 +115,13 @@ namespace BugTracker.Controllers
 
         public ActionResult Index()
         {
-            var users = _userRepo.Users.Where(user => user.Role != (int)UserRole.Admin);
+            var users = _userRepo.GetUsers();
             return View(users);
         }
 
         public ActionResult Delete(int id)
         {
-            var user = _userRepo.Users.FirstOrDefault(u => u.UserId == id);
+            var user = _userRepo.GetUser(id);
             return View(user);
         }
 
@@ -130,7 +129,7 @@ namespace BugTracker.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirm(int id)
         {
-            var user = _userRepo.Users.First(u => u.UserId == id);
+            var user = _userRepo.GetUser(id);
             _userRepo.DeleteUser(user);
 
             return RedirectToAction("Index");

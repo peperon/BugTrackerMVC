@@ -9,8 +9,11 @@ namespace BugTracker.Domain.RepositoryInterfaces
 {
     public interface IErrorRepository
     {
-        IQueryable<Error> Errors { get; }
         void SaveError(Error error);
         void DeleteError(Error error);
+
+        IEnumerable<Error> GetErrors();
+        Error GetError(int id);
+        IEnumerable<Error> GetActiveErrorsForProject(int projectId);
     }
 }

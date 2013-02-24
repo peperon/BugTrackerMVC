@@ -27,16 +27,7 @@ namespace BugTracker.Controllers
 
         public ActionResult UsersActivity()
         {
-            var model = from user in _userRepo.Users.ToList()
-                        select new UserActivityModel
-                        {
-                           UserName = user.UserName,
-                           Name = user.FirstName + " " + user.LastName,
-                           NumberOfErrors = user.Errors.Count(err => err.State != (int)ErrorState.Deleted),
-                           NumberOfProjects = user.Errors.Select(err => err.ProjectId).Distinct().Count(),
-                           ActivityDate = user.LastActivityDate,
-                           LastAction = user.LastActivity,
-                        };
+            var model = _userRepo.GetUsers().Select(user => user.ToUserActivity());
             return View(model);
         }
 
@@ -48,8 +39,7 @@ namespace BugTracker.Controllers
 
         public ActionResult AllActiveErrorsForProject()
         {
-            var model = _projectRepo.Projects.ToList()
-                .Select(p => new SelectListItem { Text = p.ProjectName, Value = p.ProjectId.ToString() });
+            var model = _projectRepo.GetProjects().Select(project => project.ToSelectListItem());
             return View(model);
         }
 
@@ -61,31 +51,13 @@ namespace BugTracker.Controllers
 
         private void FillViewBag()
         {
-            ViewBag.Projects = _projectRepo.Projects.ToList()
-                .Select(project =>
-                    new SelectListItem
-                    {
-                        Text = project.ProjectName,
-                        Value = project.ProjectId.ToString(),
-                    });
+            ViewBag.Projects = _projectRepo.GetProjects()
+                .Select(project => project.ToSelectListItem());
         }
 
         private IEnumerable<AllActiveErrorsReportModel> ActiveErrors(int projectId = 0)
         {
-            var model = from error in _errorRepo.Errors.ToList()
-                        where error.State != (int)ErrorState.Closed && error.State != (int)ErrorState.Deleted
-                        where projectId == 0 || error.ProjectId == projectId
-                        select new AllActiveErrorsReportModel
-                        {
-                            ShortDescription = (error.Description.Length <= 50) ?
-                                        new string(error.Description.Take(50).ToArray()) :
-                                        new string(error.Description.Take(50).ToArray()) + "...",
-                            Owner = (error.UserId == null) ? "no author" : error.User.FirstName + " " + error.User.LastName,
-                            Priority = ((ErrorPriority)error.Priority).ToString(),
-                            Project = error.Project.ProjectName,
-                            State = ((ErrorState)error.State).ToString(),
-                        };
-
+            var model = _errorRepo.GetActiveErrorsForProject(projectId).Select(error => error.ToAllActiveErrorModel());
             return model;
         }
     }

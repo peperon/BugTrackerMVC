@@ -17,11 +17,6 @@ namespace BugTracker.Domain.RepositoryConcrete
             _dbContext = new EFDbContext();
         }
 
-        public IQueryable<Models.Error> Errors
-        {
-            get { return _dbContext.Errors; }
-        }
-
         public void SaveError(Models.Error error)
         {
             if (error.ErrorId == 0)
@@ -35,6 +30,25 @@ namespace BugTracker.Domain.RepositoryConcrete
         {
             _dbContext.Errors.Remove(error);
             _dbContext.SaveChanges();
+        }
+
+        public IEnumerable<Error> GetErrors()
+        {
+            return _dbContext.Errors.ToList();
+        }
+
+        public Error GetError(int id)
+        {
+            return _dbContext.Errors.FirstOrDefault(error => error.ErrorId == id);
+        }
+
+
+        public IEnumerable<Error> GetActiveErrorsForProject(int projectId)
+        {
+            return from error in _dbContext.Errors.ToList()
+                   where error.State != (int)ErrorState.Closed && error.State != (int)ErrorState.Deleted
+                   where projectId == 0 || error.ProjectId == projectId
+                   select error;
         }
     }
 }

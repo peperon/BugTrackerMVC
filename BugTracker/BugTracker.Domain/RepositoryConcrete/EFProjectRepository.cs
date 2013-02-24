@@ -17,16 +17,11 @@ namespace BugTracker.Domain.RepositoryConcrete
             _dbContext = new EFDbContext();
         }
 
-        public IQueryable<Models.Project> Projects
-        {
-            get { return _dbContext.Projects; }
-        }
-
         public void SaveProject(Models.Project project)
         {
             if (project.ProjectId == 0)
                 _dbContext.Projects.Add(project);
-            else if(_dbContext.Entry<Project>(project).State != System.Data.EntityState.Modified)
+            else if (_dbContext.Entry<Project>(project).State != System.Data.EntityState.Modified)
                 _dbContext.Entry<Project>(project).State = System.Data.EntityState.Modified;
             _dbContext.SaveChanges();
         }
@@ -35,6 +30,23 @@ namespace BugTracker.Domain.RepositoryConcrete
         {
             _dbContext.Projects.Remove(project);
             _dbContext.SaveChanges();
+        }
+
+        public IEnumerable<Project> GetProjects()
+        {
+            return _dbContext.Projects.ToList();
+        }
+
+
+        public Project GetProject(int id)
+        {
+            return _dbContext.Projects.FirstOrDefault(project => project.ProjectId == id);
+        }
+
+
+        public Project GetProject(string projectName)
+        {
+            return _dbContext.Projects.FirstOrDefault(project => project.ProjectName == projectName);
         }
     }
 }
