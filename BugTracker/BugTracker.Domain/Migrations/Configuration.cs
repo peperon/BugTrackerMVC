@@ -1,12 +1,12 @@
 namespace BugTracker.Domain.Migrations
 {
     using BugTracker.Domain.Models;
-using BugTracker.Domain.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Migrations;
-using System.Linq;
+    using BugTracker.Domain.Utilities;
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity;
+    using System.Data.Entity.Migrations;
+    using System.Linq;
 
     internal sealed class Configuration : DbMigrationsConfiguration<BugTracker.Domain.RepositoryConcrete.EFDbContext>
     {
@@ -28,7 +28,7 @@ using System.Linq;
                  Phone = "08236652",
                  Role = (int)UserRole.Admin,
              };
-            if(context.Users.FirstOrDefault(u => u.UserName == user.UserName) == null)
+            if (context.Users.FirstOrDefault(u => u.UserName == user.UserName) == null)
                 context.Users.Add(user);
         }
     }

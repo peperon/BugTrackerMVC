@@ -18,7 +18,7 @@ namespace BugTracker.Infrastructure
             else
                 expirationDateTime = currentDateTime.AddMinutes(240);
 
-            // create and encrypt a cookie authentication ticket ( version, user name, issue time, expires every hour, don't persist cookie )             
+            // create and encrypt a cookie authentication ticket ( version, user name, issue time, expires every hour, don't persist cookie )        
             FormsAuthenticationTicket formTicket = new FormsAuthenticationTicket(1, userName, currentDateTime, expirationDateTime, isPersistent, role, FormsAuthentication.FormsCookiePath);
             AddAuthenticationCookie(formTicket);
         }

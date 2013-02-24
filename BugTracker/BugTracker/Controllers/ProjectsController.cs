@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace BugTracker.Controllers
 {
-    [Authorize]
+    [Authorize(Roles="Admin")]
     public class ProjectsController : Controller
     {
         private IProjectRepository _projectRepo;
@@ -94,8 +94,17 @@ namespace BugTracker.Controllers
         public ActionResult Delete(int id)
         {
             var project = _projectRepo.Projects.FirstOrDefault(p => p.ProjectId == id);
-            _projectRepo.DeleteProject(project);
 
+            return View(project);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteProject(int id)
+        {
+            var project = _projectRepo.Projects.First(p => p.ProjectId == id);
+
+            _projectRepo.DeleteProject(project);
             return RedirectToAction("Index");
         }
 
@@ -105,12 +114,18 @@ namespace BugTracker.Controllers
         private ActionResult SaveProject(Project project)
         {
             var existingProject = _projectRepo.Projects.FirstOrDefault(p => p.ProjectName == project.ProjectName);
-            if (existingProject != null)
+            if (existingProject != null && project.ProjectId != existingProject.ProjectId)
                 ModelState.AddModelError("ProjectName", "Project name is already used");
             if (!ModelState.IsValid)
                 return View(project);
 
-            _projectRepo.SaveProject(project);
+            if (existingProject != null)
+            {
+                existingProject.Description = project.Description;
+                _projectRepo.SaveProject(existingProject);
+            }
+            else
+                _projectRepo.SaveProject(project);
             return RedirectToAction("Index");
         }
     }

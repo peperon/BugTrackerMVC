@@ -11,7 +11,7 @@ using System.Web.Mvc;
 
 namespace BugTracker.Controllers
 {
-    [Authorize]
+    [Authorize(Roles="Admin")]
     public class AccountController : Controller
     {
         private IUserRepository _userRepo;
@@ -123,9 +123,14 @@ namespace BugTracker.Controllers
         public ActionResult Delete(int id)
         {
             var user = _userRepo.Users.FirstOrDefault(u => u.UserId == id);
-            foreach (var error in user.Errors)
-                error.UserId = null;
+            return View(user);
+        }
 
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirm(int id)
+        {
+            var user = _userRepo.Users.First(u => u.UserId == id);
             _userRepo.DeleteUser(user);
 
             return RedirectToAction("Index");
