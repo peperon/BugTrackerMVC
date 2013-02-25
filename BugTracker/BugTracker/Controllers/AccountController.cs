@@ -24,6 +24,8 @@ namespace BugTracker.Controllers
         [AllowAnonymous]
         public ActionResult Login()
         {
+            if (Request.IsAuthenticated)
+                return RedirectToAction("Index", "Home");
             return View();
         }
 
@@ -50,6 +52,7 @@ namespace BugTracker.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public ActionResult LogOff()
         {
             ApplicationSecurity.SignOut();

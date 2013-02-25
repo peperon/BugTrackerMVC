@@ -35,6 +35,9 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -94,7 +97,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="WebUI\AccountControllerTest.cs" />
+    <Compile Include="WebUI\Fakes\FakeHttpRequest.cs" />
+    <Compile Include="WebUI\Fakes\FakeHttpSessionState.cs" />
+    <Compile Include="WebUI\Fakes\FakeIdentity.cs" />
+    <Compile Include="WebUI\Fakes\FakePrincipal.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
@@ -103,10 +110,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BugTracker.Domain\BugTracker.Domain.csproj">
+      <Project>{15c6392b-be94-4532-a90c-4befd6472b6b}</Project>
+      <Name>BugTracker.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BugTracker\BugTracker.WebUI.csproj">
       <Project>{ADF09C56-FB0D-4C0F-A62B-DD46CCB3D321}</Project>
       <Name>BugTracker.WebUI</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Domain\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
